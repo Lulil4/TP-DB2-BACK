@@ -157,7 +157,6 @@ exports.traerDesperfectosPorZona = (req, res) => {
 
 exports.traerAtencionHechaPorZona = (req, res) => {
 
-    // Save user in the database
     db.getInstance().collection('tickets').aggregate([
 		{
 			$project: {area: 1, zona : "$domicilio.localidad.descripcion"}
@@ -174,7 +173,6 @@ exports.traerAtencionHechaPorZona = (req, res) => {
 
 exports.traerQuienHaceMas = (req, res) => {
 
-    // Save user in the database
     db.getInstance().collection('tickets').aggregate([
         {
 			$project: {cliente: "$cliente.dni"}
@@ -215,6 +213,61 @@ exports.traerQuienTieneSinResolver = (req, res) => {
             });
 };
 
+exports.traerQueTrabajoEstaResuelto = (req, res) => {
+
+    // Save user in the database
+    db.getInstance().collection('tickets').aggregate([
+		{
+			$match: {estado: "resuelto"}
+		},
+		{
+			$project: {area: 1, motivo: 1, domicilio: 1, estado: 1}
+		}]).toArray((err, result) => {
+                if (err) {
+                    return console.log(err);
+                }
+                res.send(result);
+            });
+};
+
+exports.traerCualesDesperfectosTemperley = (req, res) => {
+
+    // Save user in the database
+    db.getInstance().collection('tickets').aggregate([
+        {
+            $project: { motivo: 1, zona: "$domicilio.localidad.descripcion" }
+        },
+        {
+            $match: {zona : "Temperley"}
+        }]).toArray((err, result) => {
+            if (err) {
+                return console.log(err);
+            }
+            res.send(result);
+        });
+};
+
+exports.traerQuienHaceMenos = (req, res) => {
+
+    db.getInstance().collection('tickets').aggregate([
+        {
+			$project: {cliente: "$cliente.dni"}
+		},
+		{
+			$group: {_id : "$cliente", cantTickets : {$sum : 1}}
+		},
+		{
+			$sort: {cantTickets: 1}
+		},
+		{
+			$limit: 1
+		}]).toArray((err, result) => {
+                if (err) {
+                    return console.log(err);
+                }
+                res.send(result);
+            });
+};
 /*
 // Create user
 exports.create = (req, res) => {

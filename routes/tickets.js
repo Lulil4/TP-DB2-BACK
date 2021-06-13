@@ -12,4 +12,9 @@ router.get('/ejercicio7', ticketeraController.traerAtencionHechaPorZona);
 router.get('/ejercicio8', ticketeraController.traerQuienHaceMas);
 router.get('/ejercicio9', ticketeraController.traerQuienTieneSinResolver);
 
+router.get('/ejercicio5inverso', ticketeraController.traerQueTrabajoEstaResuelto);
+router.get('/ejercicio6especifico', ticketeraController.traerCualesDesperfectosTemperley);
+router.get('/ejercicio8inverso', ticketeraController.traerQuienHaceMenos);
+
+
 module.exports = router

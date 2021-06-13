@@ -45,3 +45,39 @@ exports.traerPlanesActualesPorCliente = (req, res) => {
                 res.send(result);
             });
 };
+
+exports.traerClienteMasCercanoAlCentro = (req, res) => {
+
+    // Save user in the database
+	db.getInstance().collection('centros').find({"tipoCentro" : "servicio técnico"}).toArray().then((data) => {
+		db.getInstance().collection('clientes').find(
+			{ 
+				"domicilios.geometry":{
+					$near: {
+								$geometry: data[0].geometry					
+						  }
+					  }
+			 }).limit(1).toArray().then((data) => {
+				res.send(data);
+			});
+	});
+
+};
+
+exports.traerClienteMasCercanoAlCentro = (req, res) => {
+
+    // Save user in the database
+	db.getInstance().collection('centros').find({"tipoCentro" : "servicio técnico"}).toArray().then((data) => {
+		db.getInstance().collection('clientes').find(
+			{ 
+				"domicilios.geometry":{
+					$near: {
+								$geometry: data[0].geometry					
+						  }
+					  }
+			 }).sort({"domicilios.geometry" : -1}).limit(1).toArray().then((data) => {
+				res.send(data);
+			});
+	});
+
+};
